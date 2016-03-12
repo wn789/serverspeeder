@@ -53,6 +53,7 @@ if [ "$DISTRO" == "unknow" ]; then
 	exit 1
 fi
 Get_Dist_Name
+Get_Dist_Name
 release=$DISTRO
 #发行版本
 if [ "$release" == "Debian" ]; then
@@ -205,7 +206,7 @@ yum -y install curl || { apt-get update;apt-get install -y curl; } || { echo "cu
 echo "======================================"
 echo "开始下载安装包。。。。"
 echo "======================================"
-wget -O 91yunserverspeeder.tar.gz  $INSTALLPACK
+wget -N -O 91yunserverspeeder.tar.gz  $INSTALLPACK
 tar xfvz 91yunserverspeeder.tar.gz || { echo "下载安装包失败，请检查";exit 1; }
 
 #下载授权文件
