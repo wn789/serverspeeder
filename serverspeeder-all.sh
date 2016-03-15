@@ -105,7 +105,7 @@ if [ $? == 1 ]; then
 	if [[ "$release" == "Ubuntu" ]] || [[ "$release" == "Debian" ]]; then
 		ver21=`echo $ver2 | awk -F '-' '{ print $1 }'`
 		ver22=`echo $ver2 | awk -F '-' '{ print $2 }'`
-		cat serverspeederbin.txt | grep -q  "$release/$ver11[^/]*/$ver21-[^/]*/$ver3/"
+		cat serverspeederbin.txt | grep -q  "$release/$ver11[^/]*/$ver21(-)?$ver22[^/]*/$ver3/"
 
 		if [ $? == 1 ]; then
 			echo -e "\r\n"
@@ -114,7 +114,7 @@ if [ $? == 1 ]; then
 		fi
 		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功,(如果有版本号重复的选项随便选一个就可以)"
 		echo -e "您当前的内核为 \033[41;37m $ver2 \033[0m"
-		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21-[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
+		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21(-)?$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
 	fi	
 	
 	
@@ -242,5 +242,8 @@ bash install.sh
 
 #禁止修改授权文件
 chattr +i /serverspeeder/etc/apx*
+#添加开机启动
+chmod +x /etc/rc.d/rc.local
+echo "/serverspeeder/bin/serverSpeeder start" >> /etc/rc.local
 #安装完显示状态
 bash /serverspeeder/bin/serverSpeeder.sh status
