@@ -53,7 +53,6 @@ if [ "$DISTRO" == "unknow" ]; then
 	exit 1
 fi
 Get_Dist_Name
-Get_Dist_Name
 release=$DISTRO
 #发行版本
 if [ "$release" == "Debian" ]; then
@@ -79,88 +78,93 @@ echo "================================================="
 #下载支持的bin列表
 curl "http://soft.91yun.org/soft/serverspeeder/serverspeederbin.txt" -o serverspeederbin.txt || { echo "文件下载失败，自动退出，可以前往http://www.91yun.org/serverspeeder91yun手动下载安装包";exit 1; }
 
-#release="CLOUD"
-#判断发行版本号
-cat serverspeederbin.txt | grep -q $release/$ver1 || { echo "暂不支持 $release $ver1";exit 1; }
+
+
 
 #判断内核版本
-#if [ "$release" = "CentOS" ]; then
-#cat serverspeederbin.txt | { grep "$release/$ver1/$ver2";} || { grep "$release/$ver1/[^/]*/$ver3";echo 2; } || awk -F '{ print $3 }' 
-#fi
-grep -q "$release/$ver1/$ver2" serverspeederbin.txt
+grep -q "$release/$ver11[^/]*/$ver2/$ver3" serverspeederbin.txt
 if [ $? == 1 ]; then
 		#echo "没有找到内核"
 	if [ "$release" == "CentOS" ]; then
 		ver21=`echo $ver2 | awk -F '-' '{ print $1 }'`
-		#echo $ver21
 		ver22=`echo $ver2 | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $1 }'`
-		#echo $ver22
-		cat serverspeederbin.txt | grep -q  "$release/$ver1/$ver21-$ver22[^/]*/$ver3/"
-		#echo "$release/$ver1/$ver21-$ver22[^/]*/$ver3/"
+		#cat serverspeederbin.txt | grep -q  "$release/$ver1/$ver21-$ver22[^/]*/$ver3/"
+		cat serverspeederbin.txt | grep -q  "$release/$ver11[^/]*/$ver21-$ver22[^/]*/$ver3/"
 
 		if [ $? == 1 ]; then
 			echo -e "\r\n"
 			echo "锐速暂不支持该内核，程序退出.自动安装判断比较严格，你可以到http://www.91yun.org/serverspeeder91yun手动下载安装文件尝试不同版本"
 			exit 1
 		fi
-		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功"
-		#echo -e "\r\n"
+		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功,(如果有版本号重复的选项随便选一个就可以)"
 		echo -e "您当前的内核为 \033[41;37m $ver2 \033[0m"
-		cat serverspeederbin.txt | grep  "$release/$ver1/$ver21-$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
+		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21-$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
 	fi
 	
 	
 	if [[ "$release" == "Ubuntu" ]] || [[ "$release" == "Debian" ]]; then
 		ver21=`echo $ver2 | awk -F '-' '{ print $1 }'`
 		ver22=`echo $ver2 | awk -F '-' '{ print $2 }'`
-		cat serverspeederbin.txt | grep -q  "$release/$ver1/$ver21-[^/]*/$ver3/"
+		cat serverspeederbin.txt | grep -q  "$release/$ver11[^/]*/$ver21(-)?$ver22[^/]*/$ver3/"
 
 		if [ $? == 1 ]; then
 			echo -e "\r\n"
 			echo "锐速暂不支持该内核，程序退出.自动安装判断比较严格，你可以到http://www.91yun.org/serverspeeder91yun手动下载安装文件尝试不同版本"
 			exit 1
 		fi
-		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功"
+		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功,(如果有版本号重复的选项随便选一个就可以)"
 		echo -e "您当前的内核为 \033[41;37m $ver2 \033[0m"
-		cat serverspeederbin.txt | grep  "$release/$ver1/$ver21-[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
+		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21(-)?$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
 	fi	
 	
 	
 	echo "请选择（输入数字序号）："	
 	read cver2
 	if [ "$cver2" == "" ]; then
+		echo "未选择任何内核版本，脚本退出"
 		exit 1
 	fi
 	
 	if [ "$release" == "CentOS" ]; then
-		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver1/$ver21-$ver22[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }'"
+		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver11[^/]*/$ver21-$ver22[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }' | awk 'NR==1{print \$1}'"
 	fi
 	if [[ "$release" == "Ubuntu" ]] || [[ "$release" == "Debian" ]]; then
-		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver1/$ver21-[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }'"
+		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver11[^/]*/$ver21-[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }' awk 'NR==1{print \$1}'"
 	fi	
 	ver2=$(eval $cver2str)
-	 if [ "$ver2" == "" ]; then
-                exit 1
-        fi
+	if [ "$ver2" == "" ]; then
+        echo "脚本获得不了内核版本号，错误退出"
+		exit 1
+    fi
+	#根据所选的内核版本，再回头确定大版本
 	
 fi
 #判断锐速版本
 grep -q "$release/$ver1/$ver2/$ver3/$ver4" serverspeederbin.txt
 if [ $? == 1 ]; then
-	echo -e "\r\n"
-	echo -e "我们用的锐速安装文件是\033[41;37m 3.10.60.0  \033[0m，但这个内核没有匹配的，请选择一个接近的锐速版本号尝试，不确保一定可用"
-	cat serverspeederbin.txt | grep  "$release/$ver1/$ver2/$ver3/"  | awk -F '/' '{ print NR"："$5 }'
-	echo "请选择锐速版本号（输入数字序号）：" 
-        read cver4
-	if [ "$cver4" == "" ]; then
-		exit 1
+	grep -q "$release/$ver11[^/]*/$ver2/$ver3/$ver4" serverspeederbin.txt
+	if [ $? == 1 ]; then
+		echo -e "\r\n"
+		echo -e "我们用的锐速安装文件是\033[41;37m 3.10.60.0  \033[0m，但这个内核没有匹配的，请选择一个接近的锐速版本号尝试，不确保一定可用,(如果有版本号重复的选项随便选一个就可以)"
+		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver2/$ver3/"  | awk -F '/' '{ print NR"："$5 }'
+		echo "请选择锐速版本号（输入数字序号）：" 
+			read cver4
+		if [ "$cver4" == "" ]; then
+			echo "未选择任何锐速版本，脚本退出"
+			exit 1
+		fi
+			cver4str="cat serverspeederbin.txt | grep  \"$release/$ver11[^/]*/$ver2/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$5 }' | awk -F '：' '/"$cver4："/{ print \$2 }' | awk 'NR==1{print \$1}'"
+			ver4=$(eval $cver4str)
+		if [ "$ver4" == "" ]; then
+			echo "没取到锐速版本，程序出错退出。"
+			exit 1
+		fi	
 	fi
-     	cver4str="cat serverspeederbin.txt | grep  \"$release/$ver1/$ver2/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$5 }' | awk -F '：' '/"$cver4："/{ print \$2 }'"
-        ver4=$(eval $cver4str)
-	 if [ "$ver4" == "" ]; then
-                exit 1
-        fi
+	#根据锐速版本，内核版本，再回头确定使用的大版本。
+	cver1str="cat serverspeederbin.txt | grep '$release/$ver11[^/]*/$ver2/$ver3/$ver4' | awk -F '/' 'NR==1{ print \$2 }'"
+	ver1=$(eval $cver1str)
 fi
+
 
 
 BINFILESTR="cat serverspeederbin.txt | grep '$release/$ver1/$ver2/$ver3/$ver4/0' | awk -F '/' '{ print \$7 }'"
@@ -238,5 +242,8 @@ bash install.sh
 
 #禁止修改授权文件
 chattr +i /serverspeeder/etc/apx*
+#添加开机启动
+chmod +x /etc/rc.d/rc.local
+echo "/serverspeeder/bin/serverSpeeder start" >> /etc/rc.local
 #安装完显示状态
 bash /serverspeeder/bin/serverSpeeder.sh status
