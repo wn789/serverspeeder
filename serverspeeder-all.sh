@@ -244,6 +244,6 @@ bash install.sh
 chattr +i /serverspeeder/etc/apx*
 #添加开机启动
 chmod +x /etc/rc.d/rc.local
-echo "/serverspeeder/bin/serverSpeeder start" >> /etc/rc.local
+echo "/serverspeeder/bin/serverSpeeder.sh start" >> /etc/rc.local
 #安装完显示状态
 bash /serverspeeder/bin/serverSpeeder.sh status
