@@ -179,17 +179,27 @@ rm -rf serverspeederbin.txt
 
 
 #先取外网ip，根据取得ip获得网卡，然后通过网卡获得mac地址。
-IP=$(curl ipip.net | awk -F ' ' '{print $2}' | awk -F '：' '{print $2}')
-NC="ifconfig | awk -F ' |:' '/$IP/{print a}{a=\$1}'"
-NETCARD=$(eval $NC)
-MACSTR="LANG=C ifconfig $NETCARD | awk '/HWaddr/{ print \$5 }' "
-MAC=$(eval $MACSTR)
-if [ "$MAC" = "" ]; then
-MACSTR="LANG=C ifconfig $NETCARD | awk '/ether/{ print \$2 }' "
-MAC=$(eval $MACSTR)
-fi
-echo IP=$IP
-echo NETCARD=$NETCARD
+# if [ "$1" == "" ]; then
+	# IP=$(curl ipip.net | awk -F ' ' '{print $2}' | awk -F '：' '{print $2}')
+	# NC="ifconfig | awk -F ' |:' '/$IP/{print a}{a=\$1}'"
+	# NETCARD=$(eval $NC)
+# else
+	# NETCARD=eth0
+# fi
+# MACSTR="LANG=C ifconfig $NETCARD | awk '/HWaddr/{ print \$5 }' "
+# MAC=$(eval $MACSTR)
+# if [ "$MAC" = "" ]; then
+# MACSTR="LANG=C ifconfig $NETCARD | awk '/ether/{ print \$2 }' "
+# MAC=$(eval $MACSTR)
+# fi	
+# echo IP=$IP
+# echo NETCARD=$NETCARD
+
+if [ "$1" == "" ]; then
+	MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
+else
+	MAC=$1
+fi	
 echo MAC=$MAC
 
 #如果自动取不到就要求手动输入
@@ -217,7 +227,7 @@ tar xfvz 91yunserverspeeder.tar.gz || { echo "下载安装包失败，请检查"
 echo "======================================"
 echo "开始下载授权文件。。。。"
 echo "======================================"
-curl "$APX?mac=$MAC" -o 91yunserverspeeder/apxfiles/etc/apx-20341231.lic || { echo "下载授权文件失败，请检查";exit 1;}
+curl "$APX?mac=$MAC" -o 91yunserverspeeder/apxfiles/etc/apx-20341231.lic || { echo "下载授权文件失败，请检查$APX?mac=$MAC";exit 1;}
 
 
 #取得序列号
