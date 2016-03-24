@@ -196,8 +196,12 @@ rm -rf serverspeederbin.txt
 # echo NETCARD=$NETCARD
 
 if [ "$1" == "" ]; then
-	MACSTR="LANG=C ifconfig eth0 | awk '/ether/{ print \$2 }' "
+	MACSTR="LANG=C ifconfig eth0 | awk '/HWaddr/{ print \$5 }' "
 	MAC=$(eval $MACSTR)
+	if [ "$MAC" == "" ]; then
+		MACSTR="LANG=C ifconfig eth0 | awk '/ether/{ print \$2 }' "
+		MAC=$(eval $MACSTR)
+	fi	
 	if [ "$MAC" == "" ]; then
 		MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
 	fi
