@@ -211,7 +211,7 @@ if [ "$1" == "" ]; then
 	if [ "$MAC" == "" ]; then
 		#MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
 		echo "本破解只支持eth0名的网卡，如果你的网卡不是eth0,请修改网卡名"
-		exit 1;
+		exit 1
 	fi
 else
 	MAC=$1
