@@ -13,10 +13,6 @@ CHECKSYSTEM=http://soft.91yun.org/soft/serverspeeder/checksystem.php
 #bin下载地址
 BIN=downloadurl
 
-#先安装lsb_release
-
-yum -y install lsb || {  apt-get update;apt-get install -y lsb; } || { echo "lsb_release没安装成功，程序暂停";exit 1; }
-yum -y install curl || { apt-get update;apt-get install -y curl; } || { echo "curl自动安装失败，请自行手动安装curl后再重新开始";exit 1; }
 
 
 #取操作系统的名称
@@ -46,21 +42,32 @@ Get_OS_Bit()
     fi
 }
 
+Get_Dist_Name
 
-#如果不是centos，ubuntu或者debian，提示出错
-if [ "$DISTRO" == "unknow" ]; then
+#安装相应的软件
+if [ "$DISTRO" == "CentOS" ];then
+	yum install -y redhat-lsb curl
+elif [ "$DISTRO" == "Debian" ];then
+	apt-get update
+	apt-get install -y lsb-release curl
+elif [ "$DISTRO" == "Ubuntu" ];then
+	apt-get update
+	apt-get install -y lsb-release curl
+else
 	echo "一键脚本暂时只支持centos，ubuntu和debian的安装，其他系统请选择手动安装http://www.91yun.org/serverspeeder91yun"
 	exit 1
 fi
-Get_Dist_Name
+
 release=$DISTRO
 #发行版本
 if [ "$release" == "Debian" ]; then
-	ver1str="lsb_release -rs | awk -F '.' '{ print \$1}'"
+	ver1str="lsb_release -rs | awk -F '.' '{ print \$1 }'"
 else
 	ver1str="lsb_release -rs | awk -F '.' '{ print \$1\".\"\$2 }'"
 fi
 ver1=$(eval $ver1str)
+ver11=`echo $ver1 | awk -F '.' '{ print $1 }'`
+
 #内核版本
 ver2=`uname -r`
 #锐速版本
@@ -177,7 +184,6 @@ rm -rf serverspeederbin.txt
 
 
 
-
 #先取外网ip，根据取得ip获得网卡，然后通过网卡获得mac地址。
 # if [ "$1" == "" ]; then
 	# IP=$(curl ipip.net | awk -F ' ' '{print $2}' | awk -F '：' '{print $2}')
@@ -203,7 +209,9 @@ if [ "$1" == "" ]; then
 		MAC=$(eval $MACSTR)
 	fi	
 	if [ "$MAC" == "" ]; then
-		MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
+		#MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
+		echo "本破解只支持eth0名的网卡，如果你的网卡不是eth0,请修改网卡名"
+		exit 1;
 	fi
 else
 	MAC=$1
@@ -216,12 +224,6 @@ echo "无法自动取得mac地址，请手动输入："
 read MAC
 echo "手动输入的mac地址是$MAC"
 fi
-
-
-#安装curl
-
-yum -y install curl || { apt-get update;apt-get install -y curl; } || { echo "curl自动安装失败，请自行手动安装curl后再重新开始";exit 1; }
-
 
 	
 #下载安装包
@@ -247,6 +249,7 @@ echo "序列号：$SNO"
 sed -i "s/serial=\"sno\"/serial=\"$SNO\"/g" 91yunserverspeeder/apxfiles/etc/config
 rv=$release"_"$ver1"_"$ver2
 sed -i "s/Debian_7_3.2.0-4-amd64/$rv/g" 91yunserverspeeder/apxfiles/etc/config
+# sed -i "s/accppp=\"1\"/accppp=\"0\"/g" 91yunserverspeeder/apxfiles/etc/config
 
 #下载bin文件
 echo "======================================"
@@ -260,8 +263,10 @@ bash install.sh
 
 #禁止修改授权文件
 chattr +i /serverspeeder/etc/apx*
-#添加开机启动
-chmod +x /etc/rc.d/rc.local
-echo "/serverspeeder/bin/serverSpeeder.sh start" >> /etc/rc.local
+#CentOS7添加开机启动
+# if [ "$release" == "CentOS" ] && [ "$ver11" == "7" ]; then
+	# chmod +x /etc/rc.d/rc.local
+	# echo "/serverspeeder/bin/serverSpeeder.sh start" >> /etc/rc.local
+# fi
 #安装完显示状态
 bash /serverspeeder/bin/serverSpeeder.sh status
