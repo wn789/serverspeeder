@@ -66,7 +66,7 @@ else
 	ver1str="lsb_release -rs | awk -F '.' '{ print \$1\".\"\$2 }'"
 fi
 ver1=$(eval $ver1str)
-ver11=`echo $ver1 | awk -F '.' '{ print $1 }'`
+#ver11=`echo $ver1 | awk -F '.' '{ print $1 }'`
 
 #内核版本
 ver2=`uname -r`
