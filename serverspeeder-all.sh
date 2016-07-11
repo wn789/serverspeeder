@@ -46,7 +46,7 @@ Get_Dist_Name
 
 #安装相应的软件
 if [ "$DISTRO" == "CentOS" ];then
-	yum install -y redhat-lsb curl
+	yum install -y redhat-lsb curl net-tools
 elif [ "$DISTRO" == "Debian" ];then
 	apt-get update
 	apt-get install -y lsb-release curl
