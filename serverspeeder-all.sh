@@ -26,7 +26,7 @@ Get_Dist_Name()
         PM='apt'
     elif grep -Eqi "Ubuntu" /etc/issue || grep -Eq "Ubuntu" /etc/*-release; then
         DISTRO='Ubuntu'
-        PM='apt'		
+        PM='apt'
 	else
         DISTRO='unknow'
     fi
@@ -107,8 +107,8 @@ if [ $? == 1 ]; then
 		echo -e "您当前的内核为 \033[41;37m $ver2 \033[0m"
 		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21-$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
 	fi
-	
-	
+
+
 	if [[ "$release" == "Ubuntu" ]] || [[ "$release" == "Debian" ]]; then
 		ver21=`echo $ver2 | awk -F '-' '{ print $1 }'`
 		ver22=`echo $ver2 | awk -F '-' '{ print $2 }'`
@@ -122,29 +122,29 @@ if [ $? == 1 ]; then
 		echo "没有完全匹配的内核，请选一个最接近的尝试，不确保一定成功,(如果有版本号重复的选项随便选一个就可以)"
 		echo -e "您当前的内核为 \033[41;37m $ver2 \033[0m"
 		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver21(-)?$ver22[^/]*/$ver3/"  | awk -F '/' '{ print NR"："$3 }'
-	fi	
-	
-	
-	echo "请选择（输入数字序号）："	
+	fi
+
+
+	echo "请选择（输入数字序号）："
 	read cver2
 	if [ "$cver2" == "" ]; then
 		echo "未选择任何内核版本，脚本退出"
 		exit 1
 	fi
-	
+
 	if [ "$release" == "CentOS" ]; then
 		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver11[^/]*/$ver21-$ver22[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }' | awk 'NR==1{print \$1}'"
 	fi
 	if [[ "$release" == "Ubuntu" ]] || [[ "$release" == "Debian" ]]; then
 		cver2str="cat serverspeederbin.txt | grep  \"$release/$ver11[^/]*/$ver21-[^/]*/$ver3/\"  | awk -F '/' '{ print NR\"：\"\$3 }' | awk -F '：' '/"$cver2："/{ print \$2 }' awk 'NR==1{print \$1}'"
-	fi	
+	fi
 	ver2=$(eval $cver2str)
 	if [ "$ver2" == "" ]; then
         echo "脚本获得不了内核版本号，错误退出"
 		exit 1
     fi
 	#根据所选的内核版本，再回头确定大版本
-	
+
 fi
 #判断锐速版本
 grep -q "$release/$ver1/$ver2/$ver3/$ver4" serverspeederbin.txt
@@ -154,7 +154,7 @@ if [ $? == 1 ]; then
 		echo -e "\r\n"
 		echo -e "我们用的锐速安装文件是\033[41;37m 3.10.60.0  \033[0m，但这个内核没有匹配的，请选择一个接近的锐速版本号尝试，不确保一定可用,(如果有版本号重复的选项随便选一个就可以)"
 		cat serverspeederbin.txt | grep  "$release/$ver11[^/]*/$ver2/$ver3/"  | awk -F '/' '{ print NR"："$5 }'
-		echo "请选择锐速版本号（输入数字序号）：" 
+		echo "请选择锐速版本号（输入数字序号）："
 			read cver4
 		if [ "$cver4" == "" ]; then
 			echo "未选择任何锐速版本，脚本退出"
@@ -165,7 +165,7 @@ if [ $? == 1 ]; then
 		if [ "$ver4" == "" ]; then
 			echo "没取到锐速版本，程序出错退出。"
 			exit 1
-		fi	
+		fi
 	fi
 	#根据锐速版本，内核版本，再回头确定使用的大版本。
 	cver1str="cat serverspeederbin.txt | grep '$release/$ver11[^/]*/$ver2/$ver3/$ver4' | awk -F '/' 'NR==1{ print \$2 }'"
@@ -197,7 +197,7 @@ rm -rf serverspeederbin.txt
 # if [ "$MAC" = "" ]; then
 # MACSTR="LANG=C ifconfig $NETCARD | awk '/ether/{ print \$2 }' "
 # MAC=$(eval $MACSTR)
-# fi	
+# fi
 # echo IP=$IP
 # echo NETCARD=$NETCARD
 
@@ -207,7 +207,7 @@ if [ "$1" == "" ]; then
 	if [ "$MAC" == "" ]; then
 		MACSTR="LANG=C ifconfig eth0 | awk '/ether/{ print \$2 }' "
 		MAC=$(eval $MACSTR)
-	fi	
+	fi
 	if [ "$MAC" == "" ]; then
 		#MAC=$(ip link | awk -F ether '{print $2}' | awk NF | awk 'NR==1{print $1}')
 		echo "本破解只支持eth0名的网卡，如果你的网卡不是eth0,请修改网卡名"
@@ -215,7 +215,7 @@ if [ "$1" == "" ]; then
 	fi
 else
 	MAC=$1
-fi	
+fi
 echo MAC=$MAC
 
 #如果自动取不到就要求手动输入
@@ -225,7 +225,7 @@ read MAC
 echo "手动输入的mac地址是$MAC"
 fi
 
-	
+
 #下载安装包
 echo "======================================"
 echo "开始下载安装包。。。。"
@@ -259,6 +259,12 @@ curl $BIN -o "91yunserverspeeder/apxfiles/bin/acce-3.10.61.0-["$release"_"$ver1"
 
 #切换目录执安装文件
 cd 91yunserverspeeder
+
+# Restore license permission to read and write if it exist for re-install.
+if [ -f /serverspeeder/etc/apx-20341231.lic ]; then
+    chattr -i /serverspeeder/etc/apx-20341231.lic
+fi
+
 bash install.sh
 
 #禁止修改授权文件
