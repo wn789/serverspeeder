@@ -82,7 +82,7 @@ else
 	grep -q "$release/[^/]*/$kernel1\(-\)\{0,1\}$kernel2[^/]*/$bit" serverspeederbin.txt
 	if [ $? -eq 1 ]; then
 			echo -e "\r\n"
-			echo "serverspeeder not supported this system!!"
+			echo -e "serverspeeder not supported this system!! you can find all supported system here:\033[41;37m https://www.91yun.org/serverspeeder91yun \033[0m"
 			exit 1
 	else
 		#如果模糊匹配到了，就给玩家选
