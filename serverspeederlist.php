@@ -8,10 +8,10 @@ if(!empty($_GET["release"])){
 	$binfile = $_GET["binfile"];
 	echo '请在服务器上执行以下命令：';
 	echo '<br>';
-	echo '<pre class="lang:sh decode:true ">';
+	echo '<pre class="lang:sh decode:true " style="overflow: auto; overflow-y:hidden">';
 	echo "wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/test/serverspeeder-v.sh && bash serverspeeder-v.sh $release $releasever $kernel_result $bit $serverspeederver $binfile";
 	echo '</pre>';
-	echo "<BR><BR>";
+	echo "<BR>";
 	echo "<a href='?'>选择其他的内核</a>";
 	exit(0);
 }

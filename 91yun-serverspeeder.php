@@ -37,7 +37,7 @@ function check_page($text){
 		$bit = $_GET["bit"];
 		$serverspeederver = $_GET["serverspeederver"];
 		$binfile = $_GET["binfile"];
-		$text = file_get_contents("http://rs.91.pw/serverspeederlist.php?release=$release&releasever=$releasever&kernel_result=$kernel_result&bit=$bit&serverspeederver=$serverspeederver&binfile=$binfile");				
+		$text = file_get_contents("http://rs.91yun.pw/serverspeederlist.php?release=$release&releasever=$releasever&kernel_result=$kernel_result&bit=$bit&serverspeederver=$serverspeederver&binfile=$binfile");				
 		return $text;
 	}
 	else

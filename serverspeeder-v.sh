@@ -70,7 +70,8 @@ BINFILE=$1"/"$2"/"$3"/"$4"/"$5"/"$6
 BIN=${BINURL}${BINFILE}
 
 
-
+echo "installing ServerSpeeder,please wait a moment..."
+echo -e "\r\n"
 
 
 MACSTR="LANG=C ifconfig eth0 | awk '/HWaddr/{ print \$5 }' "
