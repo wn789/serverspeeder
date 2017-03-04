@@ -11,7 +11,7 @@ INSTALLPACK=https://github.com/91yun/serverspeeder/blob/test/91yunserverspeeder.
 #判断版本支持情况的地址
 CHECKSYSTEM=https://raw.githubusercontent.com/91yun/serverspeeder/test/serverspeederbin.txt
 #bin下载地址
-BIN=downloadurl
+BINURL=http://rs.91yun.pw/
 
 
 
@@ -129,7 +129,7 @@ if [ "$BINFILE" == "" ]; then
 	echo "it can not get BINFILE ,install stopped"
 	exit 1
 fi
-BIN="http://rs.91yun.pw/"$BINFILE
+BIN=${BINURL}${BINFILE}
 rm -rf serverspeederbin.txt
 
 
@@ -163,13 +163,13 @@ wget -N --no-check-certificate -O 91yunserverspeeder.tar.gz  $INSTALLPACK  > /de
 tar xfvz 91yunserverspeeder.tar.gz  > /dev/null 2>&1 || { echo "can not download install package.install stopped";exit 1; }
 
 #下载授权文件
-wget -N -O apx-20341231.lic "$APX?mac=$MAC"  > /dev/null 2>&1 || { echo "can not download lic file,please check : $APX?mac=$MAC";exit 1;}
+wget -N --no-check-certificate -O apx-20341231.lic "$APX?mac=$MAC"  > /dev/null 2>&1 || { echo "can not download lic file,please check : $APX?mac=$MAC";exit 1;}
 mv apx-20341231.lic 91yunserverspeeder/apxfiles/etc/
 
 
 #取得序列号
 
-wget -N -O serverspeedersn.txt "$APX?mac=$MAC&sno"  > /dev/null 2>&1
+wget -N --no-check-certificate -O serverspeedersn.txt "$APX?mac=$MAC&sno"  > /dev/null 2>&1
 SNO=$(cat serverspeedersn.txt)
 rm -rf serverspeedersn.txt
 sed -i "s/serial=\"sno\"/serial=\"$SNO\"/g" 91yunserverspeeder/apxfiles/etc/config
@@ -177,7 +177,7 @@ rv=$release"_"$kernel_result
 sed -i "s/acce-3.10.61.0-\[Debian_7_3.2.0-4-amd64\]/acce-$serverspeederver-[$rv]/g" 91yunserverspeeder/apxfiles/etc/config
 
 #下载bin文件
-wget -N -O "acce-"$serverspeederver"-["$release"_"$kernel_result"]" $BIN  > /dev/null 2>&1
+wget -N --no-check-certificate -O "acce-"$serverspeederver"-["$release"_"$kernel_result"]" $BIN  > /dev/null 2>&1
 mv "acce-"$serverspeederver"-["$release"_"$kernel_result"]" 91yunserverspeeder/apxfiles/bin/
 
 #切换目录执安装文件
