@@ -56,7 +56,7 @@ echo "================================================="
 echo -e "\r\n"
 
 #下周支持的内核库
-wget $CHECKSYSTEM --no-check-certificate -O serverspeederbin.txt > /dev/null 2>&1 || { echo "Error downloading file, please try again later.";exit 1; }
+wget $CHECKSYSTEM --no-check-certificate -O serverspeederbin.txt || { echo "Error downloading file, please try again later.";exit 1; }
 
 #判断是否有完全匹配的内核
 grep -q "$release/[^/]*/$kernel/$bit" serverspeederbin.txt
@@ -159,17 +159,17 @@ fi
 
 	
 #下载安装包
-wget -N --no-check-certificate -O 91yunserverspeeder.tar.gz  $INSTALLPACK  > /dev/null 2>&1
-tar xfvz 91yunserverspeeder.tar.gz  > /dev/null 2>&1 || { echo "Unable to download Installation package. Installation terminated.";exit 1; }
+wget -N --no-check-certificate -O 91yunserverspeeder.tar.gz  $INSTALLPACK 
+tar xfvz 91yunserverspeeder.tar.gz || { echo "Unable to download Installation package. Installation terminated.";exit 1; }
 
 #下载授权文件
-wget -N --no-check-certificate -O apx-20341231.lic "$APX?mac=$MAC"  > /dev/null 2>&1 || { echo "Unable to download lic file, please check: $APX?mac=$MAC";exit 1;}
+wget -N --no-check-certificate -O apx-20341231.lic "$APX?mac=$MAC" || { echo "Unable to download lic file, please check: $APX?mac=$MAC";exit 1;}
 mv apx-20341231.lic 91yunserverspeeder/apxfiles/etc/
 
 
 #取得序列号
 
-wget -N --no-check-certificate -O serverspeedersn.txt "$APX?mac=$MAC&sno"  > /dev/null 2>&1
+wget -N --no-check-certificate -O serverspeedersn.txt "$APX?mac=$MAC&sno"
 SNO=$(cat serverspeedersn.txt)
 rm -rf serverspeedersn.txt
 sed -i "s/serial=\"sno\"/serial=\"$SNO\"/g" 91yunserverspeeder/apxfiles/etc/config
@@ -177,12 +177,12 @@ rv=$release"_"$kernel_result
 sed -i "s/acce-3.10.61.0-\[Debian_7_3.2.0-4-amd64\]/acce-$serverspeederver-[$rv]/g" 91yunserverspeeder/apxfiles/etc/config
 
 #下载bin文件
-wget -N --no-check-certificate -O "acce-"$serverspeederver"-["$release"_"$kernel_result"]" $BIN  > /dev/null 2>&1
+wget -N --no-check-certificate -O "acce-"$serverspeederver"-["$release"_"$kernel_result"]" $BIN 
 mv "acce-"$serverspeederver"-["$release"_"$kernel_result"]" 91yunserverspeeder/apxfiles/bin/
 
 #切换目录执安装文件
 cd 91yunserverspeeder
-bash install.sh  > /dev/null 2>&1
+bash install.sh
 
 #禁止修改授权文件
 chattr +i /serverspeeder/etc/apx*
