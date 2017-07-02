@@ -11,7 +11,7 @@ INSTALLPACK=https://github.com/wn789/serverspeeder/blob/master/91yunserverspeede
 #判断版本支持情况的地址
 CHECKSYSTEM=https://raw.githubusercontent.com/wn789/serverspeeder/master/serverspeederbin.txt
 #bin下载地址
-BINURL=http://www.wn789.com/
+BINURL=http://rs.91yun.pw/
 
 
 
