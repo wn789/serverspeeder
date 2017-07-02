@@ -14,7 +14,6 @@ CHECKSYSTEM=https://raw.githubusercontent.com/wn789/serverspeeder/master/servers
 BINURL=http://rs.91yun.pw/
 
 
-
 #取操作系统的名称
 Get_Dist_Name()
 {
