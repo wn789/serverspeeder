@@ -5,7 +5,7 @@ export PATH
 
 #定义变量
 #授权文件自动生成url
-APX=http://www.wn789.com/apx1.php
+APX=http://rs.91yun.pw/apx1.php
 #安装包下载地址
 INSTALLPACK=https://github.com/wn789/serverspeeder/blob/master/91yunserverspeeder.tar.gz?raw=true
 #判断版本支持情况的地址
