@@ -5,11 +5,11 @@ export PATH
 
 #定义变量
 #授权文件自动生成url
-APX=http://soft.91yun.org/soft/serverspeeder/apx1.php
+APX=http://rs.91yun.pw/apx1.php
 #安装包下载地址
-INSTALLPACK=http://soft.91yun.org/soft/serverspeeder/91yunserverspeeder.tar.gz
+INSTALLPACK=https://github.com/91yun/serverspeeder/blob/test/91yunserverspeeder.tar.gz?raw=true
 #判断版本支持情况的地址
-CHECKSYSTEM=http://soft.91yun.org/soft/serverspeeder/checksystem.php
+CHECKSYSTEM=https://raw.githubusercontent.com/91yun/serverspeeder/test/serverspeederbin.txt
 #bin下载地址
 BIN=downloadurl
 

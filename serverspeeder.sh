@@ -7,11 +7,12 @@ export PATH
 #授权文件自动生成url
 APX=http://rs.91yun.pw/apx1.php
 #安装包下载地址
-INSTALLPACK=https://github.com/wn789/serverspeeder/blob/master/91yunserverspeeder.tar.gz?raw=true
+INSTALLPACK=https://github.com/91yun/serverspeeder/blob/test/91yunserverspeeder.tar.gz?raw=true
 #判断版本支持情况的地址
-CHECKSYSTEM=https://raw.githubusercontent.com/wn789/serverspeeder/master/serverspeederbin.txt
+CHECKSYSTEM=https://raw.githubusercontent.com/91yun/serverspeeder/test/serverspeederbin.txt
 #bin下载地址
 BINURL=http://rs.91yun.pw/
+
 
 
 #取操作系统的名称
@@ -48,14 +49,14 @@ kernel_result=""
 
 echo -e "\r\n"
 echo "===============System Info======================="
-echo "操作系统：$release "
-echo "内核版本：$kernel "
-echo "位数：$bit "
+echo "$release "
+echo "$kernel "
+echo "$bit "
 echo "================================================="
 echo -e "\r\n"
 
 #下周支持的内核库
-wget $CHECKSYSTEM --no-check-certificate -O serverspeederbin.txt || { echo "Error downloading file, please try again later.（下载文件时出错，请稍后再试。）";exit 1; }
+wget $CHECKSYSTEM --no-check-certificate -O serverspeederbin.txt || { echo "Error downloading file, please try again later.";exit 1; }
 
 #判断是否有完全匹配的内核
 grep -q "$release/[^/]*/$kernel/$bit" serverspeederbin.txt
@@ -74,26 +75,26 @@ else
 		kernel1=`echo $kernel | awk -F '-' '{ print $1 }'`
 		kernel2=`echo $kernel | awk -F '-' '{ print $2 }'`
 	else
-		echo "This script only supports CentOS, Ubuntu and Debian.这个脚本只支持CentOS，Ubuntu和Debian。"
+		echo "This script only supports CentOS, Ubuntu and Debian."
 		exit 1
 	fi
 	
 	grep -q "$release/[^/]*/$kernel1\(-\)\{0,1\}$kernel2[^/]*/$bit" serverspeederbin.txt
 	if [ $? -eq 1 ]; then
 			echo -e "\r\n"
-			echo -e "Serverspeeder is not supported on this kernel! View all supported systems and kernels!（不支持这个内核！）"
+			echo -e "Serverspeeder is not supported on this kernel! View all supported systems and kernels here:\033[41;37m https://www.91yun.org/serverspeeder91yun \033[0m"
 			exit 1
 	else
 		#如果模糊匹配到了，就给玩家选
-		echo "There is no exact match for this kernel, please choose the closest one below:（此内核没有精确匹配，请选择下面最接近的：）"
+		echo "There is no exact match for this kernel, please choose the closest one below:"
 		echo -e "The current kernel is \033[41;37m $kernel \033[0m"
 		echo -e "\r\n"
 		cat serverspeederbin.txt | grep  "$release/[^/]*/$kernel1\(-\)\{0,1\}$kernel2[^/]*/$bit"  | awk -F '/' '{ print NR"："$3 }'
 		echo -e "\r\n"
-		echo "Please enter the number of your option：（请输入您的选项编号：）"	
+		echo "Please enter the number of your option："	
 		read cver2
 		if [ "$cver2" == "" ]; then
-			echo "You did not choose any kernel options. Installation terminated.（您没有选择任何内核选项。安装终止。）"
+			echo "You did not choose any kernel options. Installation terminated."
 			exit 1
 		fi
 		echo -e "\r\n"
@@ -103,11 +104,11 @@ else
 fi
 
 if [ "$kernel_result" == "" ]; then
-	echo "Unable to get kernel information. Installtion terminated.（无法获取内核信息。安装终止。）"
+	echo "Unable to get kernel information. Installtion terminated."
 	exit 1
 fi
 
-echo "Installing ServerSpeeder, please wait for a moment...（安装ServerSpeeder，请稍等…）"
+echo "Installing ServerSpeeder, please wait for a moment..."
 
 
 #开始匹配锐速的版本
@@ -125,7 +126,7 @@ fi
 BINFILESTR="cat serverspeederbin.txt | grep '$release/[^/]*/$kernel_result/$bit/$serverspeederver/0' | awk -F '/' '{ print \$1\"/\"\$2\"/\"\$3\"/\"\$4\"/\"\$5\"/\"\$7 }'"
 BINFILE=$(eval $BINFILESTR)
 if [ "$BINFILE" == "" ]; then
-	echo "Unable to get BINFILE. Installation terminated.（无法获得binfile。安装终止。）"
+	echo "Unable to get BINFILE. Installation terminated."
 	exit 1
 fi
 BIN=${BINURL}${BINFILE}
@@ -143,7 +144,7 @@ if [ "$1" == "" ]; then
 		MAC=$(eval $MACSTR)
 	fi	
 	if [ "$MAC" == "" ]; then
-		echo "The name of network interface is not eth0, please retry after changing the name.（网络接口的名称不是eth0，请改名后重试。）"
+		echo "The name of network interface is not eth0, please retry after changing the name."
 		exit 1
 	fi
 else
@@ -152,7 +153,7 @@ fi
 
 #如果自动取不到就退出
 if [ "$MAC" = "" ]; then
-	echo "Unable to get MAC address. Installation terminated.（无法获得MAC地址。安装终止。）"
+	echo "Unable to get MAC address. Installation terminated."
 	exit 1
 fi
 
